@@ -7,6 +7,11 @@
 
 import UIKit
 
+public protocol BetterSegmentedControlDelegate : NSObjectProtocol {
+    
+    func betterSegmentedControlDidScrollWithOffset(betterSegmentedControl: BetterSegmentedControl, offset: CGFloat)
+}
+
 // MARK: - BetterSegmentedControl
 @IBDesignable open class BetterSegmentedControl: UIControl {
     // MARK: IndicatorView
@@ -107,6 +112,8 @@ import UIKit
             setNeedsLayout()
         }
     }
+    
+    public weak var delegate: BetterSegmentedControlDelegate?
     /// Whether the indicator should bounce when selecting a new index. Defaults to true
     public var bouncesOnChange = true
     /// Whether the the control should always send the .ValueChanged event, regardless of the index remaining unchanged after interaction. Defaults to false
@@ -206,7 +213,7 @@ import UIKit
     fileprivate let selectedTitleLabelsView = UIView()
     fileprivate let indicatorView = IndicatorView()
     fileprivate var initialIndicatorViewFrame: CGRect?
-
+    
     fileprivate var tapGestureRecognizer: UITapGestureRecognizer!
     fileprivate var panGestureRecognizer: UIPanGestureRecognizer!
     
@@ -253,7 +260,7 @@ import UIKit
                   indicatorViewBackgroundColor: Color.indicatorViewBackground,
                   selectedTitleColor: Color.selectedTitle)
     }
-
+    
     @available(*, unavailable, message: "Use init(frame:titles:index:backgroundColor:titleColor:indicatorViewBackgroundColor:selectedTitleColor:) instead.")
     convenience init() {
         self.init(frame: CGRect.zero,
@@ -289,6 +296,7 @@ import UIKit
         selectedTitleLabelsView.frame = bounds
         
         indicatorView.frame = elementFrame(forIndex: index)
+        updateDelegate()
         
         for index in 0...titleLabelsCount-1 {
             let frame = elementFrame(forIndex: UInt(index))
@@ -314,9 +322,9 @@ import UIKit
         self.index = index
         moveIndicatorViewToIndex(animated, shouldSendEvent: (self.index != oldIndex || alwaysAnnouncesValue))
     }
-
+    
     // MARK: Indicator View Customization
-
+    
     /**
      Adds the passed view as a subview to the indicator view
      
@@ -367,6 +375,7 @@ import UIKit
     }
     fileprivate func moveIndicatorView() {
         indicatorView.frame = titleLabels[Int(self.index)].frame
+        updateDelegate()
         layoutIfNeeded()
     }
     
@@ -388,10 +397,17 @@ import UIKit
             frame.origin.x += gestureRecognizer.translation(in: self).x
             frame.origin.x = max(min(frame.origin.x, bounds.width - indicatorViewInset - frame.width), indicatorViewInset)
             indicatorView.frame = frame
+            updateDelegate()
         case .ended, .failed, .cancelled:
             try! setIndex(nearestIndex(toPoint: indicatorView.center))
         default: break
         }
+    }
+    
+    // MARK: Delegate
+    
+    private func updateDelegate() -> Void {
+        delegate?.betterSegmentedControlDidScrollWithOffset(betterSegmentedControl: self, offset: indicatorView.frame.origin.x - indicatorViewInset)
     }
 }
 

@@ -41,6 +41,7 @@ class ViewController: UIViewController {
         control1.alwaysAnnouncesValue = true
         control1.announcesValueImmediately = false
         print(control1.titles)
+        control1.delegate = self
         
         // Control 2: Exclusively defined in IB
         
@@ -114,3 +115,9 @@ class ViewController: UIViewController {
     }
 }
 
+extension ViewController: BetterSegmentedControlDelegate {
+    
+    func betterSegmentedControlDidScrollWithOffset(betterSegmentedControl: BetterSegmentedControl, offset: CGFloat) {
+        print("offset: ", offset)
+    }
+}
