@@ -7,7 +7,7 @@
 
 import UIKit
 
-public protocol BetterSegmentedControlDelegate : NSObjectProtocol {
+@objc public protocol BetterSegmentedControlDelegate {
     
     func betterSegmentedControlDidScrollWithOffset(betterSegmentedControl: BetterSegmentedControl, offset: CGFloat)
 }
@@ -113,7 +113,7 @@ public protocol BetterSegmentedControlDelegate : NSObjectProtocol {
         }
     }
     
-    public weak var delegate: BetterSegmentedControlDelegate?
+    @objc public weak var delegate: BetterSegmentedControlDelegate?
     /// Whether the indicator should bounce when selecting a new index. Defaults to true
     public var bouncesOnChange = true
     /// Whether the the control should always send the .ValueChanged event, regardless of the index remaining unchanged after interaction. Defaults to false
