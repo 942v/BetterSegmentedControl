@@ -65,8 +65,10 @@ import UIKit
     
     // MARK: Properties
     /// The selected index
+    @objc
     public fileprivate(set) var index: UInt
     /// The titles / options available for selection
+    @objc
     public var titles: [String] {
         get {
             let titleLabels = titleLabelsView.subviews as! [UILabel]
@@ -177,12 +179,14 @@ import UIKit
         }
     }
     /// The titles' font
+    @objc
     public var titleFont: UIFont = UILabel().font {
         didSet {
             titleLabels.forEach { $0.font = titleFont }
         }
     }
     /// The selected title's font
+    @objc
     public var selectedTitleFont: UIFont = UILabel().font {
         didSet {
             selectedTitleLabels.forEach { $0.font = selectedTitleFont }
@@ -346,7 +350,7 @@ import UIKit
                            delay: 0.0,
                            usingSpringWithDamping: bouncesOnChange ? Animation.springDamping : 1.0,
                            initialSpringVelocity: 0.0,
-                           options: [UIViewAnimationOptions.beginFromCurrentState, UIViewAnimationOptions.curveEaseOut],
+                           options: [.beginFromCurrentState, .curveEaseOut],
                            animations: {
                             () -> Void in
                             self.moveIndicatorView()
