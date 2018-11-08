@@ -323,6 +323,12 @@ import UIKit
         moveIndicatorViewToIndex(animated, shouldSendEvent: (self.index != oldIndex || alwaysAnnouncesValue))
     }
     
+    @objc public func setIndexWithNoError(_ index: UInt, animated: Bool = true) -> Void {
+        let oldIndex = self.index
+        self.index = index
+        moveIndicatorViewToIndex(animated, shouldSendEvent: (self.index != oldIndex || alwaysAnnouncesValue))
+    }
+    
     // MARK: Indicator View Customization
     
     /**
