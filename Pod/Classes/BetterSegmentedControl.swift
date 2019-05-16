@@ -377,7 +377,7 @@ import UIKit
     }
     fileprivate func nearestIndex(toPoint point: CGPoint) -> UInt {
         let distances = titleLabels.map { abs(point.x - $0.center.x) }
-        return UInt(distances.index(of: distances.min()!)!)
+        return UInt(distances.firstIndex(of: distances.min()!)!)
     }
     fileprivate func moveIndicatorView() {
         indicatorView.frame = titleLabels[Int(self.index)].frame
